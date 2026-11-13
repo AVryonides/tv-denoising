@@ -75,3 +75,32 @@ Close the figure window to return to the terminal.
 - These are development observations; runtime improvement and
   generalization have not yet been established.
 - AI assistance supplied solver code, explanations and verification tests.
+
+## Run the development smoke comparison
+
+```bash
+python run_experiments.py --config configs/smoke.json
+```
+
+Runs all three methods on two development seeds at three noise levels.
+Writes 18 case-level rows to outputs/smoke/cases.csv and records the
+configuration, software environment and Git state in metadata.json.
+Rerunning overwrites these files.
+
+Runtime includes solver initialization and convergence diagnostics.
+Data generation, reconstruction metrics and file writing are excluded.
+Each method receives one warm-up per case, followed by three timed runs.
+The CSV retains individual timings and their median.
+
+This smoke comparison uses provisional settings and is not the final
+scientific evaluation.
+
+## Experiment runner
+
+- Added MSE and PSNR metrics and a configurable CSV-producing runner.
+- Smoke run covered two development seeds and three noise levels.
+- All 18 method-case combinations reached normalized-gap tolerance=0.001.
+- Recorded three timings after one warm-up per method and case.
+- Acceleration reduced runtime on all six development cases.
+- Results remain preliminary; lambda has not yet been validation-selected.
+- AI assistance supplied the runner, metrics and metric tests.
