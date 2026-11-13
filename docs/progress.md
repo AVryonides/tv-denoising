@@ -118,3 +118,20 @@ scientific evaluation.
   to reach tolerance.
 - The largest observed count was 5700 iterations for Chambolle.
 - Retained lambda=0.175, tolerance=0.001 and check_every=10.
+
+## Final experiment protocol
+
+- Both shapes and texture smoke runs completed: all 36 method-case
+  combinations reached the fixed tolerance.
+- Added a reproducible checkerboard stress generator and regional MSE.
+- Final configurations use seeds 1000–1019 and three noise levels,
+  with 20 paired cases per noise level and image type.
+- Frozen settings: lambda=0.175, normalized-gap tolerance=0.001,
+  check_every=10, iteration cap=20000, three timing repeats after warm-up.
+- Primary outcome: paired runtime difference at matched gap tolerance.
+- Secondary outcomes: convergence rate, iterations, MSE and PSNR;
+  texture-region MSE is also reported for stress images.
+- Report capped runs explicitly and exclude them from successful
+  time-to-tolerance comparisons.
+- Related conditions share seeds; uncertainty calculations must preserve
+  that pairing and dependence.

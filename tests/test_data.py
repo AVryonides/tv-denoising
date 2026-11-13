@@ -4,7 +4,7 @@ import unittest
 
 import numpy as np
 
-from src.data import make_image
+from src.data import make_image, make_textured_image
 
 
 class TestData(unittest.TestCase):
@@ -26,8 +26,7 @@ class TestData(unittest.TestCase):
 
         np.testing.assert_array_equal(clean1, clean2)
 
-        # With the same seed, increasing sigma fourfold should
-        # multiply the generated noise by four.
+        # The same seed produces the same underlying noise draws.
         np.testing.assert_allclose(
             noisy2 - clean2,
             4.0 * (noisy1 - clean1),
@@ -46,6 +45,42 @@ class TestData(unittest.TestCase):
                 self.assertTrue(np.isfinite(noisy).all())
                 self.assertTrue((clean >= 0.0).all())
                 self.assertTrue((clean <= 1.0).all())
+
+    def test_texture_is_reproducible_and_preserves_noise(self):
+        clean, noisy = make_image(seed=7, size=96, sigma=0.1)
+
+        textured, textured_noisy = make_textured_image(
+            seed=7, size=96, sigma=0.1
+        )
+        repeated_clean, repeated_noisy = make_textured_image(
+            seed=7, size=96, sigma=0.1
+        )
+
+        np.testing.assert_array_equal(textured, repeated_clean)
+        np.testing.assert_array_equal(
+            textured_noisy, repeated_noisy
+        )
+        np.testing.assert_allclose(
+            textured_noisy - textured,
+            noisy - clean,
+            rtol=0,
+            atol=1e-15,
+        )
+
+        start, stop = 24, 72
+        yy, xx = np.mgrid[:48, :48]
+        expected = 0.4 + 0.2 * ((yy // 2 + xx // 2) % 2)
+
+        np.testing.assert_allclose(
+            textured[start:stop, start:stop], expected
+        )
+
+        outside = np.ones(clean.shape, dtype=bool)
+        outside[start:stop, start:stop] = False
+
+        np.testing.assert_array_equal(
+            textured[outside], clean[outside]
+        )
 
 
 if __name__ == "__main__":

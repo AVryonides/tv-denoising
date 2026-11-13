@@ -11,7 +11,7 @@ from time import perf_counter
 import numpy as np
 
 from src.baseline import chambolle_denoise
-from src.data import make_image
+from src.data import make_image, make_textured_image
 from src.metrics import mse, psnr
 from src.modified import projected_dual_denoise
 
@@ -23,7 +23,6 @@ METHODS = [
     ("projected", projected_dual_denoise, {"accelerated": False}),
     ("accelerated", projected_dual_denoise, {"accelerated": True}),
 ]
-
 
 def git_output(*args):
     """Read Git metadata without modifying the repository."""
@@ -49,6 +48,22 @@ def main():
 
     with config_path.open() as handle:
         config = json.load(handle)
+
+    image_type = config.get("image_type", "shapes")
+
+    generators = {
+        "shapes": make_image,
+        "texture": make_textured_image,
+    }
+
+    if image_type not in generators:
+        raise ValueError(
+            "image_type must be 'shapes' or 'texture'."
+        )
+
+    generator = generators[image_type]
+
+    repeats = config["repeats"]
 
     repeats = config["repeats"]
     if (
@@ -95,7 +110,7 @@ def main():
         "iterations", "converged", "normalized_gap",
         "noisy_mse", "mse", "psnr_db",
         "runtime_median_s", "runtime_min_s", "runtime_max_s",
-        "runtime_samples_s",
+        "runtime_samples_s", "image_type", "texture_region_mse",
     ]
 
     csv_path = output_dir / "cases.csv"
@@ -106,7 +121,7 @@ def main():
 
         for sigma in config["sigmas"]:
             for seed in config["seeds"]:
-                clean, noisy = make_image(
+                clean, noisy = generator(
                     seed=seed,
                     size=config["size"],
                     sigma=sigma,
@@ -143,6 +158,17 @@ def main():
                             f"Non-finite gap for {name}, seed={seed}."
                         )
 
+                    texture_region_mse = ""
+
+                    if image_type == "texture":
+                        start = config["size"] // 4
+                        stop = 3 * config["size"] // 4
+
+                        texture_region_mse = mse(
+                            clean[start:stop, start:stop],
+                            image[start:stop, start:stop],
+                        )
+
                     row = {
                         "split": config["split"],
                         "seed": seed,
@@ -163,6 +189,8 @@ def main():
                         "runtime_min_s": min(samples),
                         "runtime_max_s": max(samples),
                         "runtime_samples_s": json.dumps(samples),
+                        "image_type": image_type,
+                        "texture_region_mse": texture_region_mse,
                     }
                     writer.writerow(row)
 
