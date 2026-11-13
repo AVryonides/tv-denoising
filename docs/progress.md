@@ -104,3 +104,17 @@ scientific evaluation.
 - Acceleration reduced runtime on all six development cases.
 - Results remain preliminary; lambda has not yet been validation-selected.
 - AI assistance supplied the runner, metrics and metric tests.
+
+## Iteration-cap development check
+
+- With the validation-selected lambda=0.175, Chambolle failed to reach
+  normalized-gap tolerance=0.001 within 5000 iterations on development
+  seeds 0 and 1 at sigma=0.05.
+- All other smoke cases reached tolerance.
+- Increased the shared iteration cap to 20000 for a development recheck.
+- Lambda and stopping tolerance remain unchanged.
+- Capped runs are not treated as successful time-to-tolerance results.
+- Rechecking with the shared cap of 20000 allowed all 18 smoke runs
+  to reach tolerance.
+- The largest observed count was 5700 iterations for Chambolle.
+- Retained lambda=0.175, tolerance=0.001 and check_every=10.
