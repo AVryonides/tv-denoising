@@ -1,4 +1,4 @@
-# Progress log 13/11/26 - 10:06am
+# Progress log 13/11/26
 
 ## Image operators
 
