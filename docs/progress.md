@@ -1,4 +1,4 @@
-# Progress log 13/11/26 - 10:06am
+# Progress log 13/11/26
 
 ## Image operators
 
@@ -15,3 +15,46 @@
 AI assisted with explanations, operator documentation and verification tests.
 The gradient and divergence formulas/code originate from the course
 mathematical guide.
+
+## Synthetic image demonstration
+
+- Added the synthetic rectangles-and-disks generator from the course guide.
+- Added unmodified additive Gaussian noise without clipping.
+- Created demo.py to display and save clean, noisy and denoised images.
+- Development example: seed=0, size=96, sigma=0.1, lambda=0.1,
+  iterations=200.
+- Observed noisy MSE=0.010024 and denoised MSE=0.000454.
+- This is a development example, not final-test evidence.
+- Added checks for reproducibility, zero noise, matched clean images
+  across noise levels, shapes, clean intensity range and finite outputs.
+- AI assistance supplied the demonstration script, generator adaptation
+  and verification tests.
+
+  ## Run checks
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+## Run the baseline demonstration
+
+```bash
+python demo.py
+```
+
+This displays clean, noisy and denoised synthetic images, prints their
+reconstruction MSE, and saves outputs/baseline_demo.png.
+Close the figure window to return to the terminal.
+
+## Convergence diagnostics
+
+- Added isotropic TV, primal and dual objectives, and the primal-dual gap.
+- Added optional baseline stopping using:
+  (primal - dual) / max(1, abs(primal), abs(dual)).
+- Retained fixed-iteration behaviour when no tolerance is supplied.
+- Check the gap every check_every iterations and at the iteration cap.
+- A development image with seed=0, size=96, sigma=0.1 and lambda=0.1
+  reached tolerance=0.001 after 820 iterations, checking every 10.
+- This tolerance is provisional pending validation.
+- AI assistance supplied diagnostic calculations, stopping-rule edits
+  and verification tests.
