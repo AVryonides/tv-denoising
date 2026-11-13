@@ -64,8 +64,6 @@ def main():
     generator = generators[image_type]
 
     repeats = config["repeats"]
-
-    repeats = config["repeats"]
     if (
         isinstance(repeats, bool)
         or not isinstance(repeats, int)
