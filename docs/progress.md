@@ -58,3 +58,20 @@ Close the figure window to return to the terminal.
 - This tolerance is provisional pending validation.
 - AI assistance supplied diagnostic calculations, stopping-rule edits
   and verification tests.
+
+## Accelerated dual solver
+
+- Implemented projected dual gradients with optional FISTA-style momentum,
+  following Beck and Teboulle (2009) with our operator sign convention.
+- Retained accelerated=False as the no-momentum ablation.
+- Both modes optimize the same objective as the Chambolle baseline.
+- Verified projection, first iteration, known solution, constant images,
+  boundary shapes, mean preservation, input preservation, feasibility,
+  stopping tolerance and iteration-cap behaviour.
+- All 25 tests passed.
+- Development case: seed=0, size=96, sigma=0.1, lambda=0.1,
+  normalized-gap tolerance=0.001, checked every 10 iterations.
+- Iterations: Chambolle=820, projected=590, accelerated=100.
+- These are development observations; runtime improvement and
+  generalization have not yet been established.
+- AI assistance supplied solver code, explanations and verification tests.
