@@ -1,7 +1,4 @@
 # Total-Variation Image Denoising
-
-Computational Methods and Algorithms — EEP55C36.
-
 ## Aim
 
 Implement and verify Chambolle's 2004 fixed-point algorithm for
@@ -34,3 +31,19 @@ Initial project setup. Algorithms and experiments are not implemented.
 AI assistance is being used for explanations, project planning,
 setup, verification and debugging. A detailed declaration will
 be maintained as the project develops.
+
+## Chambolle baseline
+
+- Implemented the fixed-point iteration with tau = 1/8.
+- Used the existing gradient and divergence boundary conventions.
+- Verified a hand-computable first iteration and an exact two-pixel solution.
+- Checked constant-image preservation, mean preservation, finite outputs,
+  output shape, integer inputs, input preservation and invalid inputs.
+- All nine operator and baseline tests passed.
+- The solver currently uses a fixed iteration count; convergence diagnostics
+  will be added before the final experimental comparison.
+
+### Assistance
+
+I drafted the baseline implementation. AI assistance identified errors and
+provided a corrected version, explanations and verification tests.
