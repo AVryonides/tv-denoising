@@ -135,3 +135,18 @@ scientific evaluation.
   time-to-tolerance comparisons.
 - Related conditions share seeds; uncertainty calculations must preserve
   that pairing and dependence.
+
+  ## Final paired analysis
+
+- Both final runs used clean commit
+  e374205d3ba0f34b63ecd81081cfabc211cff5b3.
+- All 360 method-case combinations reached tolerance.
+- Calculated paired runtime savings, speedups and MSE differences.
+- Used 10000 bootstrap resamples of 20 paired seed cases separately
+  within each image-type/noise condition, with analysis seed 2026.
+- Accelerated-versus-baseline mean paired speedups ranged from
+  6.41x to 15.38x; all corresponding 95% intervals exceeded one.
+- The no-momentum ablation was slower than acceleration in every
+  condition on average.
+- Texture loss remains a shared model limitation.
+- AI assistance supplied the analysis and plotting scripts.
