@@ -1,4 +1,4 @@
-# Progress log 13/11/26
+# Progress log
 
 ## Image operators
 
@@ -75,3 +75,78 @@ Close the figure window to return to the terminal.
 - These are development observations; runtime improvement and
   generalization have not yet been established.
 - AI assistance supplied solver code, explanations and verification tests.
+
+## Run the development smoke comparison
+
+```bash
+python run_experiments.py --config configs/smoke.json
+```
+
+Runs all three methods on two development seeds at three noise levels.
+Writes 18 case-level rows to outputs/smoke/cases.csv and records the
+configuration, software environment and Git state in metadata.json.
+Rerunning overwrites these files.
+
+Runtime includes solver initialization and convergence diagnostics.
+Data generation, reconstruction metrics and file writing are excluded.
+Each method receives one warm-up per case, followed by three timed runs.
+The CSV retains individual timings and their median.
+
+This smoke comparison uses provisional settings and is not the final
+scientific evaluation.
+
+## Experiment runner
+
+- Added MSE and PSNR metrics and a configurable CSV-producing runner.
+- Smoke run covered two development seeds and three noise levels.
+- All 18 method-case combinations reached normalized-gap tolerance=0.001.
+- Recorded three timings after one warm-up per method and case.
+- Acceleration reduced runtime on all six development cases.
+- Results remain preliminary; lambda has not yet been validation-selected.
+- AI assistance supplied the runner, metrics and metric tests.
+
+## Iteration-cap development check
+
+- With the validation-selected lambda=0.175, Chambolle failed to reach
+  normalized-gap tolerance=0.001 within 5000 iterations on development
+  seeds 0 and 1 at sigma=0.05.
+- All other smoke cases reached tolerance.
+- Increased the shared iteration cap to 20000 for a development recheck.
+- Lambda and stopping tolerance remain unchanged.
+- Capped runs are not treated as successful time-to-tolerance results.
+- Rechecking with the shared cap of 20000 allowed all 18 smoke runs
+  to reach tolerance.
+- The largest observed count was 5700 iterations for Chambolle.
+- Retained lambda=0.175, tolerance=0.001 and check_every=10.
+
+## Final experiment protocol
+
+- Both shapes and texture smoke runs completed: all 36 method-case
+  combinations reached the fixed tolerance.
+- Added a reproducible checkerboard stress generator and regional MSE.
+- Final configurations use seeds 1000–1019 and three noise levels,
+  with 20 paired cases per noise level and image type.
+- Frozen settings: lambda=0.175, normalized-gap tolerance=0.001,
+  check_every=10, iteration cap=20000, three timing repeats after warm-up.
+- Primary outcome: paired runtime difference at matched gap tolerance.
+- Secondary outcomes: convergence rate, iterations, MSE and PSNR;
+  texture-region MSE is also reported for stress images.
+- Report capped runs explicitly and exclude them from successful
+  time-to-tolerance comparisons.
+- Related conditions share seeds; uncertainty calculations must preserve
+  that pairing and dependence.
+
+  ## Final paired analysis
+
+- Both final runs used clean commit
+  e374205d3ba0f34b63ecd81081cfabc211cff5b3.
+- All 360 method-case combinations reached tolerance.
+- Calculated paired runtime savings, speedups and MSE differences.
+- Used 10000 bootstrap resamples of 20 paired seed cases separately
+  within each image-type/noise condition, with analysis seed 2026.
+- Accelerated-versus-baseline mean paired speedups ranged from
+  6.41x to 15.38x; all corresponding 95% intervals exceeded one.
+- The no-momentum ablation was slower than acceleration in every
+  condition on average.
+- Texture loss remains a shared model limitation.
+- AI assistance supplied the analysis and plotting scripts.

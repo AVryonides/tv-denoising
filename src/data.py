@@ -53,3 +53,24 @@ def make_image(seed, size=96, sigma=0.1):
     noisy = clean + sigma * rng.normal(size=clean.shape)
 
     return clean, noisy
+
+def make_textured_image(seed, size=96, sigma=0.1):
+    """Return an image with a central checkerboard stress region.
+
+    Uses the standard synthetic image and its existing noise realization.
+    The central region is replaced by a checkerboard with intensities
+    0.4 and 0.6 and squares two pixels wide.
+    """
+    clean, noisy = make_image(seed=seed, size=size, sigma=sigma)
+    noise = noisy - clean
+
+    start = size // 4
+    stop = 3 * size // 4
+
+    yy, xx = np.mgrid[:stop - start, :stop - start]
+    checkerboard = ((yy // 2 + xx // 2) % 2).astype(float)
+
+    clean[start:stop, start:stop] = 0.4 + 0.2 * checkerboard
+    noisy = clean + noise
+
+    return clean, noisy

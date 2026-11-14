@@ -1,0 +1,12 @@
+{
+  "split": "development",
+  "seeds": [0, 1],
+  "size": 96,
+  "sigmas": [0.05, 0.10, 0.20],
+  "lam": 0.175,
+  "iterations": 20000,
+  "tolerance": 0.001,
+  "check_every": 10,
+  "repeats": 3,
+  "output_dir": "outputs/smoke"
+}
