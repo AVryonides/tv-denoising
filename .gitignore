@@ -13,3 +13,10 @@ __pycache__/
 
 # Regenerable experiment outputs
 outputs/
+
+# LaTeX build intermediates (keep report/TV_Denoising_Report.pdf)
+report/*.aux
+report/*.log
+report/*.out
+report/*.toc
+report/main.pdf
