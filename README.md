@@ -431,6 +431,9 @@ corrected version. The modified solver and substantial supporting code
 were also supplied with AI assistance. The course guide supplied the
 gradient/divergence implementation and the initial synthetic-data generator.
 
+Cursor was used for a final checkup on the code, including a review for
+redundancy and a limited refactor that preserved existing functionality.
+
 This declaration records the assistance received. I am responsible for
 reviewing the implementation, understanding the submitted work, checking
 its correctness and following the module’s academic-integrity requirements.
