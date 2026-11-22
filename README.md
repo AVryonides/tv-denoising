@@ -321,8 +321,8 @@ Reproduce parameter selection:
 python select_lambda.py
 ```
 
-This writes validation outputs to `outputs/validation/`.
-The recorded selection evidence is retained in `results/validation/`.
+This writes validation outputs to `results/validation/`
+(configured in `configs/validation.json`).
 
 Reproduce the final comparisons:
 
@@ -331,13 +331,11 @@ python run_experiments.py --config configs/final.json
 python run_experiments.py --config configs/stress_final.json
 ```
 
-These write to `outputs/final/` and `outputs/stress_final/`.
-Allow several minutes on a comparable machine; runtime varies.
-
-The analysis scripts read the recorded CSVs under `results/`.
-To analyse newly generated runs, copy the matching CSV and metadata pair
-from each output directory into its corresponding results directory first.
-This replaces the recorded inputs, so preserve the originals if needed.
+These write directly to `results/final/` and `results/stress_final/`.
+Smoke configs still write under `outputs/` so quick checks do not
+overwrite recorded final CSVs. Allow several minutes on a comparable
+machine; runtime varies. Re-running final configs replaces the
+recorded inputs, so preserve the originals if needed.
 
 Analyse the saved results and regenerate figures:
 
@@ -373,11 +371,15 @@ src/
   modified.py          Projected and accelerated dual solvers
   operators.py         Gradient and divergence
   diagnostics.py       TV objectives and primal–dual gap
+  solver_utils.py      Shared validation, stopping and info helpers
+  methods.py           Shared method registry
+  plotting.py          Shared figure saving
   data.py              Shapes and texture generators
   metrics.py           MSE and PSNR
 tests/                 Verification checks
-configs/               Smoke and final configurations
+configs/               Smoke, validation and final configurations
 results/               Recorded CSVs, metadata and figures
+outputs/               Smoke / demo outputs (non-recorded)
 docs/progress.md       Development decisions and corrections
 demo.py                Interactive baseline example
 select_lambda.py       Validation sweep

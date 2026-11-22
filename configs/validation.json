@@ -1,0 +1,14 @@
+{
+  "split": "validation",
+  "seeds": [100, 101, 102, 103, 104, 105, 106, 107, 108, 109],
+  "sigmas": [0.05, 0.10, 0.20],
+  "size": 96,
+  "candidates": [
+    0.02, 0.04, 0.06, 0.08, 0.10,
+    0.15, 0.175, 0.20, 0.225, 0.25, 0.30, 0.40
+  ],
+  "iterations": 20000,
+  "tolerance": 1e-05,
+  "check_every": 10,
+  "output_dir": "results/validation"
+}

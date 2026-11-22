@@ -4,7 +4,7 @@ import unittest
 
 import numpy as np
 
-from src.data import make_image, make_textured_image
+from src.data import make_image, make_textured_image, texture_region_bounds
 
 
 class TestData(unittest.TestCase):
@@ -67,8 +67,8 @@ class TestData(unittest.TestCase):
             atol=1e-15,
         )
 
-        start, stop = 24, 72
-        yy, xx = np.mgrid[:48, :48]
+        start, stop = texture_region_bounds(96)
+        yy, xx = np.mgrid[:stop - start, :stop - start]
         expected = 0.4 + 0.2 * ((yy // 2 + xx // 2) % 2)
 
         np.testing.assert_allclose(

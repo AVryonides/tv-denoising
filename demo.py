@@ -3,10 +3,10 @@
 from pathlib import Path
 
 import matplotlib.pyplot as plt
-import numpy as np
 
 from src.baseline import chambolle_denoise
 from src.data import make_image
+from src.metrics import mse
 
 
 def main():
@@ -24,8 +24,8 @@ def main():
         iterations=iterations,
     )
 
-    noisy_mse = float(np.mean((noisy - clean)**2))
-    denoised_mse = float(np.mean((denoised - clean)**2))
+    noisy_mse = mse(clean, noisy)
+    denoised_mse = mse(clean, denoised)
 
     print(f"Noisy MSE:    {noisy_mse:.6f}")
     print(f"Denoised MSE: {denoised_mse:.6f}")

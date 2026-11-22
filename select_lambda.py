@@ -1,5 +1,6 @@
 """Select a shared lambda using validation images only."""
 
+import argparse
 import csv
 import json
 from pathlib import Path
@@ -15,20 +16,21 @@ ROOT = Path(__file__).resolve().parent
 
 
 def main():
-    settings = {
-        "split": "validation",
-        "seeds": list(range(100, 110)),
-        "sigmas": [0.05, 0.10, 0.20],
-        "size": 96,
-        "candidates": [
-            0.02, 0.04, 0.06, 0.08, 0.10,
-            0.15, 0.175, 0.20, 0.225, 0.25, 0.30, 0.40,],
-        "iterations": 20000,
-        "tolerance": 1e-5,
-        "check_every": 10,
-    }
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--config",
+        default="configs/validation.json",
+    )
+    args = parser.parse_args()
 
-    output_dir = ROOT / "outputs" / "validation"
+    config_path = Path(args.config)
+    if not config_path.is_absolute():
+        config_path = ROOT / config_path
+
+    with config_path.open() as handle:
+        settings = json.load(handle)
+
+    output_dir = ROOT / settings["output_dir"]
     output_dir.mkdir(parents=True, exist_ok=True)
 
     with (output_dir / "settings.json").open("w") as handle:

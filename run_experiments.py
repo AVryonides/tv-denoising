@@ -10,19 +10,12 @@ from time import perf_counter
 
 import numpy as np
 
-from src.baseline import chambolle_denoise
-from src.data import make_image, make_textured_image
+from src.data import make_image, make_textured_image, texture_region_bounds
+from src.methods import METHODS
 from src.metrics import mse, psnr
-from src.modified import projected_dual_denoise
 
 
 ROOT = Path(__file__).resolve().parent
-
-METHODS = [
-    ("chambolle", chambolle_denoise, {}),
-    ("projected", projected_dual_denoise, {"accelerated": False}),
-    ("accelerated", projected_dual_denoise, {"accelerated": True}),
-]
 
 def git_output(*args):
     """Read Git metadata without modifying the repository."""
@@ -126,10 +119,10 @@ def main():
                 )
 
                 # Warm up every method on this exact case.
-                for _, solver, options in METHODS:
+                for _, _, solver, options in METHODS:
                     solver(noisy, **settings, **options)
 
-                timings = {name: [] for name, _, _ in METHODS}
+                timings = {name: [] for name, _, _, _ in METHODS}
                 results = {}
 
                 # Rotate method order to reduce systematic order effects.
@@ -137,7 +130,7 @@ def main():
                     offset = repeat % len(METHODS)
                     order = METHODS[offset:] + METHODS[:offset]
 
-                    for name, solver, options in order:
+                    for name, _, solver, options in order:
                         start = perf_counter()
                         image, info = solver(
                             noisy, **settings, **options
@@ -147,7 +140,7 @@ def main():
                         timings[name].append(elapsed)
                         results[name] = (image, info)
 
-                for name, _, _ in METHODS:
+                for name, _, _, _ in METHODS:
                     image, info = results[name]
                     samples = timings[name]
 
@@ -159,8 +152,9 @@ def main():
                     texture_region_mse = ""
 
                     if image_type == "texture":
-                        start = config["size"] // 4
-                        stop = 3 * config["size"] // 4
+                        start, stop = texture_region_bounds(
+                            config["size"]
+                        )
 
                         texture_region_mse = mse(
                             clean[start:stop, start:stop],

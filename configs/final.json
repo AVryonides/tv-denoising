@@ -14,5 +14,5 @@
   "tolerance": 0.001,
   "check_every": 10,
   "repeats": 3,
-  "output_dir": "outputs/final"
+  "output_dir": "results/final"
 }

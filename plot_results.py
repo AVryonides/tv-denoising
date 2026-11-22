@@ -6,6 +6,8 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 
+from src.plotting import save_figure
+
 
 ROOT = Path(__file__).resolve().parent
 
@@ -82,15 +84,7 @@ def main():
         "20 paired cases per condition; percentile bootstrap 95% CIs"
     )
 
-    output_dir = ROOT / "results" / "figures"
-    output_dir.mkdir(parents=True, exist_ok=True)
-
-    for extension in ["png", "pdf"]:
-        output_path = output_dir / f"runtime_speedup.{extension}"
-        fig.savefig(output_path, dpi=200)
-        print(f"Saved: {output_path}")
-
-    plt.close(fig)
+    save_figure(fig, "runtime_speedup")
 
 
 if __name__ == "__main__":

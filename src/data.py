@@ -54,6 +54,11 @@ def make_image(seed, size=96, sigma=0.1):
 
     return clean, noisy
 
+def texture_region_bounds(size):
+    """Return the inclusive-exclusive bounds of the central texture ROI."""
+    return size // 4, 3 * size // 4
+
+
 def make_textured_image(seed, size=96, sigma=0.1):
     """Return an image with a central checkerboard stress region.
 
@@ -64,8 +69,7 @@ def make_textured_image(seed, size=96, sigma=0.1):
     clean, noisy = make_image(seed=seed, size=size, sigma=sigma)
     noise = noisy - clean
 
-    start = size // 4
-    stop = 3 * size // 4
+    start, stop = texture_region_bounds(size)
 
     yy, xx = np.mgrid[:stop - start, :stop - start]
     checkerboard = ((yy // 2 + xx // 2) % 2).astype(float)

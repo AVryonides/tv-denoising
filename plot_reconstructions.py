@@ -7,41 +7,13 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 
-from src.baseline import chambolle_denoise
 from src.data import make_image, make_textured_image
+from src.methods import METHODS
 from src.metrics import mse
-from src.modified import projected_dual_denoise
+from src.plotting import save_figure
 
 
 ROOT = Path(__file__).resolve().parent
-FIGURES = ROOT / "results" / "figures"
-
-METHODS = [
-    ("chambolle", "Chambolle", chambolle_denoise, {}),
-    (
-        "projected",
-        "Projected",
-        projected_dual_denoise,
-        {"accelerated": False},
-    ),
-    (
-        "accelerated",
-        "Accelerated",
-        projected_dual_denoise,
-        {"accelerated": True},
-    ),
-]
-
-
-def save_figure(fig, name):
-    FIGURES.mkdir(parents=True, exist_ok=True)
-
-    for extension in ["png", "pdf"]:
-        path = FIGURES / f"{name}.{extension}"
-        fig.savefig(path, dpi=200)
-        print(f"Saved: {path}")
-
-    plt.close(fig)
 
 
 def load_results(folder):
@@ -139,6 +111,34 @@ def plot_quality():
     )
 
     summaries = []
+    styles = {
+        "noisy": {
+            "color": "tab:blue",
+            "linestyle": "-",
+            "marker": "o",
+            "markersize": 6,
+        },
+        "chambolle": {
+            "color": "tab:orange",
+            "linestyle": "-",
+            "marker": "o",
+            "markersize": 11,
+            "markerfacecolor": "none",
+        },
+        "projected": {
+            "color": "tab:green",
+            "linestyle": "--",
+            "marker": "s",
+            "markersize": 8,
+            "markerfacecolor": "none",
+        },
+        "accelerated": {
+            "color": "tab:red",
+            "linestyle": ":",
+            "marker": "x",
+            "markersize": 6,
+        },
+    }
 
     for ax, folder, label in zip(
         axes,
@@ -182,35 +182,6 @@ def plot_quality():
                     "cases": len(selected),
                     "mean_mse": mean_mse,
                 })
-
-                styles = {
-                "noisy": {
-                    "color": "tab:blue",
-                    "linestyle": "-",
-                    "marker": "o",
-                    "markersize": 6,
-                },
-                "chambolle": {
-                    "color": "tab:orange",
-                    "linestyle": "-",
-                    "marker": "o",
-                    "markersize": 11,
-                    "markerfacecolor": "none",
-                },
-                "projected": {
-                    "color": "tab:green",
-                    "linestyle": "--",
-                    "marker": "s",
-                    "markersize": 8,
-                    "markerfacecolor": "none",
-                },
-                "accelerated": {
-                    "color": "tab:red",
-                    "linestyle": ":",
-                    "marker": "x",
-                    "markersize": 6,
-                },
-            }
 
             ax.plot(
                 sigmas,
