@@ -367,7 +367,7 @@ submission tag. Runtime is expected to vary between executions.
 
 - Public repository: https://github.com/AVryonides/tv-denoising
 - Submission tag: `v1.0-submission`
-- Submission commit: resolve with `git rev-parse v1.0-submission^{commit}`
+- Submission commit: `99b9404bc0bf939aa65a020b6ee7c2610884127c`
 - Report PDF: [`report/TV_Denoising_Report.pdf`](report/TV_Denoising_Report.pdf)
 
 Resolve the tagged commit locally with:
